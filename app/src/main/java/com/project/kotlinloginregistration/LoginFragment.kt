@@ -28,20 +28,26 @@ class LoginFragment : Fragment() {
         binding.btn.setOnClickListener {
             login()
         }
+        binding.tvRegistration.setOnClickListener {
+            register()
+        }
 
         return view;
     }
 
+    private fun register() {
+        val action = LoginFragmentDirections.actionLoginFragmentToRegistrationFragment()
+        NavHostFragment.findNavController(requireParentFragment()).navigate(action)
+    }
+
     private fun login() {
-        val email = binding.txtLoginEmail.text.trim();
-        val password = binding.txtLoginPassword.text.trim();
+        val email = binding.txtLoginEmail.text.trim() as String;
+        val password = binding.txtLoginPassword.text.trim() as String;
 
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this.context, "Empty fields", Toast.LENGTH_SHORT).show();
         } else {
-
-
-
+            login(email, password)
         }
     }
 
