@@ -6,12 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.fragment.NavHostFragment
+import com.google.firebase.auth.FirebaseAuth
 import com.project.kotlinloginregistration.databinding.FragmentLoginBinding
 
 
 class LoginFragment : Fragment() {
 
     private lateinit var binding: FragmentLoginBinding;
+    private lateinit var mAuth: FirebaseAuth;
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -20,6 +23,7 @@ class LoginFragment : Fragment() {
         binding =
             FragmentLoginBinding.bind(inflater.inflate(R.layout.fragment_login, container, false));
         val view = binding.root;
+        mAuth = FirebaseAuth.getInstance();
 
         binding.btn.setOnClickListener {
             login()
@@ -29,6 +33,29 @@ class LoginFragment : Fragment() {
     }
 
     private fun login() {
-        Toast.makeText(this@LoginFragment.requireContext(), "Yoooo", Toast.LENGTH_SHORT).show()
+        val email = binding.txtLoginEmail.text.trim();
+        val password = binding.txtLoginPassword.text.trim();
+
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this.context, "Empty fields", Toast.LENGTH_SHORT).show();
+        } else {
+
+
+
+        }
     }
+
+    private fun login(email: String, password: String) {
+        mAuth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener(this.requireActivity()) { task ->
+                if (task.isSuccessful) {
+                    val action = LoginFragmentDirections.actionLoginFragmentToHomeFragment();
+                    NavHostFragment.findNavController(requireParentFragment()).navigate(action);
+                } else {
+                    Toast.makeText(this.context, "Error logging in", Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+
+
 }
