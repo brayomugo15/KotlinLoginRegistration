@@ -1,6 +1,7 @@
 package com.project.kotlinloginregistration
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -35,36 +36,39 @@ class RegistrationFragment : Fragment() {
     }
 
     private fun register() {
-        val fname = binding.txtRegFname.text.trim();
-        val lname = binding.txtRegLname.text.trim();
-        val email = binding.txtRegEmail.text.trim();
-        val password = binding.txtRegPassword.text.trim();
+        val fname = binding.txtRegFname.text.toString().trim();
+        val lname = binding.txtRegLname.text.toString().trim();
+        val email = binding.txtRegEmail.text.toString().trim();
+        val password = binding.txtRegPassword.text.toString().trim();
 
         if (fname.isEmpty() || lname.isEmpty() || email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this.requireContext(), "Fill in all the details", Toast.LENGTH_SHORT).show()
         } else {
             val name = "$fname $lname";
 
-            val user = User(name as String, email as String);
-            reference.push().setValue(user as User)
+            mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task->
                     if (task.isSuccessful) {
-                        register(email, password as String)
+                        register(name, email)
                     } else {
-                        Toast.makeText(this.requireContext(), "Error", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this.requireContext(), "Unsuccessful", Toast.LENGTH_SHORT).show()
                     }
                 }
         }
     }
 
-    private fun register(email: String, password: String) {
-        mAuth.createUserWithEmailAndPassword(email, password)
+    private fun register(name: String, email: String) {
+
+        val user = User(name, email);
+
+        reference.push().setValue(user)
             .addOnCompleteListener { task->
                 if (task.isSuccessful) {
                     val action = RegistrationFragmentDirections.actionRegistrationFragmentToHomeFragment();
                     NavHostFragment.findNavController(requireParentFragment()).navigate(action)
                 } else {
-                    Toast.makeText(this.requireContext(), "Unsuccessful", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this.requireContext(), "Error " + task.exception, Toast.LENGTH_SHORT).show()
+                    Log.e("Registration", "Exception: " + task.exception)
                 }
             }
     }

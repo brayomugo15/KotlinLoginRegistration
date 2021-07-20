@@ -41,8 +41,8 @@ class LoginFragment : Fragment() {
     }
 
     private fun login() {
-        val email = binding.txtLoginEmail.text.trim() as String;
-        val password = binding.txtLoginPassword.text.trim() as String;
+        val email = binding.txtLoginEmail.text.toString().trim();
+        val password = binding.txtLoginPassword.text.toString().trim();
 
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this.context, "Empty fields", Toast.LENGTH_SHORT).show();
