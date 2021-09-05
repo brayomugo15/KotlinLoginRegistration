@@ -8,7 +8,8 @@
 
 
 ## Prerequisite
-
+- [Setting Up](#Setting)
+- [Libraries](#Libraries)
 
 ## Related Resources
 
