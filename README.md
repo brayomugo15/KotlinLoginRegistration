@@ -1,4 +1,4 @@
-# KotlinLoginRegistration - Android Mobile App
+# KotlinLoginRegistration App
 
 
 ## Table of Contents
